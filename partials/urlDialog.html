@@ -1,0 +1,25 @@
+<html>
+<body> 
+  <div id="host-choice">
+      <input type="button" value="Start/Connect To Localhost" onclick="chooseLocalhost()">
+      <input type="url" placeholder="Host IP or URL" id="host-url">
+      <input type="submit" value="Submit" onclick="chooseRemotehost()">
+  </div>
+   
+   <script type="text/javascript"> 
+      const ipcRenderer = require('electron').ipcRenderer;
+      
+      var chooseLocalhost = function(){
+          ipcRenderer.send('start-localhost', 'http://localhost');
+      };
+      
+      var chooseRemotehost = function(){
+          var boardurl = document.getElementById('host-url').value ;
+          ipcRenderer.send('connect-remote-host', boardurl);
+          console.log(boardurl);
+      };
+      
+   </script>
+
+</body> 
+</html> 
