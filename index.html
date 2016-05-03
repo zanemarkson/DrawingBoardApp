@@ -12,7 +12,9 @@
 
     <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="css/style.css"/>
 </head>
 
 <!--
@@ -22,17 +24,43 @@
 <body>
 
     <!--<div ng-class="blurAtLogin">-->
-    <div id="boardContainer">
-        <canvas id="drawingPad" style="border: 1px solid #ccc"></canvas>
-        <div>
-            <input type="color" id="user-color-choice" placeholder="Please enter color" onchange="DrawingBoard.getLineSpec()">
-            <input type="number" min="0.5" max="25" step="0.5" id="user-linewidth-choice" placeholder="Please enter LineWidth: 10" onchange="DrawingBoard.getLineSpec()">
-            <!-- <input type="button" id="change-color" value="Submit" onclick="getLineSpec()"> -->
-            <input type="button" id="clear-drawing" value="Clear" onclick="DrawingBoard.clearDrawing()">
-            <input type="text" id="channel-name" placeholder="Channel Name">
-            <input type="button" id="connect" value="Connect" onclick="Remote.submitKey('fullstack')">
-            <input type="button" id="disconnect" value="Disconnect/View Only" onclick="Remote.localOnly()">
+    <div id="boardContainer" class="container-fluid">
+        <div class="row">
+            <div class="col-md-8" id="pad-container">
+                <canvas id="drawingPad" style="border: 1px solid #ccc"></canvas>
+            </div>
+
+            <div class="col-md-3" id="control-panel" style="margin-left: 35px; margin-top: 35px">
+
+                <h3 id="control-panel-title">Control Panel</h3>
+                <!--<input type="number" min="0.5" max="25" step="0.5" id="user-linewidth-choice" placeholder="Please enter LineWidth: 10" onchange="DrawingBoard.getLineSpec()">-->
+                <label for="user-color-choice">Choose Your Color</label>
+                <div class="input-group">
+                    <input type="color" id="user-color-choice" onchange="DrawingBoard.getLineSpec()">
+                </div>
+
+                <label for="user-linewidth-choice">Choose LineWidth</label>
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></span>
+                    <input type="number" class="form-control"  aria-describedby="basic-addon1" min="0.5" max="25" step="0.5" id="user-linewidth-choice" placeholder="Please Enter LineWidth: 10 (Default)" onchange="DrawingBoard.getLineSpec()">
+                </div>
+
+                <label for="channel-name">Choose Channel</label>
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon3">@</span>
+                    <input type="text" class="form-control" placeholder="Channel Name" aria-describedby="basic-addon3" id="channel-name">
+                </div>
+                <!-- <input type="button" id="change-color" value="Submit" onclick="getLineSpec()"> -->
+                <!--<input type="button" id="clear-drawing" value="Clear" onclick="DrawingBoard.clearDrawing()">-->
+                <button type="button" class="btn btn-warning" id="clear-drawing" value="Clear" onclick="DrawingBoard.clearDrawing()">Clear</button>
+
+                <!--<input type="button" id="connect" value="Connect" onclick="Remote.submitKey('fullstack')">-->
+                <!--<input type="button" id="disconnect" value="Disconnect/View Only" onclick="Remote.localOnly()">-->
+                <button type="button" class="btn btn-info" id="connect" onclick="Remote.submitKey('fullstack')">Connect</button>
+                <button type="button" class="btn btn-danger" id="disconnect" onclick="Remote.localOnly()">Disconnect/View Only</button>
+            </div>
         </div>
+
     </div>
 
 
@@ -40,7 +68,7 @@
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="js/localdraw.js"></script>
     <script src="js/remotedraw.js"></script>
-    <script src="js/menu.js"></script>
+    <!--<script src="js/menu.js"></script>-->
 
 
     <!--

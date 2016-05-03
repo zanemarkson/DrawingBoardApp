@@ -1,4 +1,5 @@
 const remote = require('electron').remote;
+const Menu = remote.Menu;
 
 var template = [
   // {

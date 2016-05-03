@@ -5,10 +5,10 @@
 var DrawingBoard = ( function(){
 
     var config = function (padElement, option) {
-        padElement.height = 800 || option.height ;
-        padElement.width = 1600 || option.width ;
-        padElement.offsetX = 8 || option.offsetX ;
-        padElement.offsetY = 8 || option.offsetY ;
+        padElement.height = option.height || 800 ;
+        padElement.width = option.width || 1600 ;
+        padElement.offsetX = 18 || option.offsetX ;
+        padElement.offsetY = 22 || option.offsetY ;
         var ctx = padElement.getContext('2d');
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.lineWidth = 5 || option.lineWidth;
@@ -20,7 +20,11 @@ var DrawingBoard = ( function(){
     };
 
     var pad = document.getElementById('drawingPad');
-    var ctx = config(pad);
+    var width = document.getElementById('pad-container').offsetWidth;
+    // var height = document.getElementById('drawingPad').offsetHeight;
+    var ctx = config(pad, {
+        width: width
+    });
 
     var isDrawing = false ;
     var isClearing = false ;
@@ -83,7 +87,7 @@ var DrawingBoard = ( function(){
     // Mouse Motion
     pad.onmousedown = function(evt){
 
-        pos(evt.clientX, evt.clientY);
+        pos( evt.clientX - pad.offsetX , evt.clientY - pad.offsetY );
 
         if( evt.button == 0 ){
             isDrawing = true ;
@@ -101,19 +105,19 @@ var DrawingBoard = ( function(){
     };
     pad.onmousemove = function (evt) {
         if ( isDrawing == true && isClearing == false ){
-            draw(ctx, position.x, position.y, evt.clientX, evt.clientY);
-            pos(evt.clientX, evt.clientY);
+            draw(ctx, position.x, position.y, evt.clientX - pad.offsetX , evt.clientY - pad.offsetY );
+            pos( evt.clientX - pad.offsetX , evt.clientY - pad.offsetY );
             pad.style.cursor = "default" ;
         }
         else if ( isDrawing == false && isClearing == true ){
-            pos(evt.clientX, evt.clientY);
+            pos( evt.clientX - pad.offsetX , evt.clientY - pad.offsetY );
             //pad.style.cursor = 'url("assets/img/eraser.png") ' + eraserDiameter + ' ' + eraserDiameter + ', auto';
             //pad.style.cursor = 'url("assets/img/sponge.png") ';
             pad.style.cursor = "crosshair" ;
             erase(ctx, position.x, position.y ) ;
         }
         else{
-            pos( evt.clientX, evt.clientY);
+            pos( evt.clientX - pad.offsetX , evt.clientY - pad.offsetY );
         }
     };
     pad.onmouseup = function(){
@@ -136,24 +140,24 @@ var DrawingBoard = ( function(){
             isClearing = true ;
             isDrawing = false ;
             evt.button = 2;
-            pos(evt.touches[0].pageX, evt.touches[0].pageY ) ;
+            pos( evt.touches[0].pageX - pad.offsetX, evt.touches[0].pageY - pad.offsetY ) ;
             erase(ctx, position.x, position.y ) ;
         }, 500 ) ;
-        pos(evt.touches[0].pageX, evt.touches[0].pageY ) ;
+        pos( evt.touches[0].pageX - pad.offsetX, evt.touches[0].pageY - pad.offsetY ) ;
 
     },false);
 
     pad.addEventListener('touchmove', function(evt){
         if ( isDrawing == true && isClearing == false ){
-            draw(ctx, position.x, position.y, evt.clientX, evt.clientY);
-            pos(evt.touches[0].pageX, evt.touches[0].pageY ) ;
+            draw(ctx, position.x, position.y, evt.touches[0].pageX - pad.offsetX, evt.touches[0].pageY - pad.offsetY );
+            pos( evt.touches[0].pageX - pad.offsetX, evt.touches[0].pageY - pad.offsetY ) ;
         }
         else if ( isDrawing == false && isClearing == true ){
-            pos(evt.touches[0].pageX, evt.touches[0].pageY ) ;
+            pos( evt.touches[0].pageX - pad.offsetX, evt.touches[0].pageY - pad.offsetY) ;
             erase(ctx, position.x, position.y ) ;
         }
         else{
-            pos(evt.touches[0].pageX, evt.touches[0].pageY ) ;
+            pos( evt.touches[0].pageX - pad.offsetX, evt.touches[0].pageY - pad.offsetY ) ;
         }
     }, false);
     pad.addEventListener('touchend', pauseDrawing, false);

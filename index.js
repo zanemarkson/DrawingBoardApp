@@ -114,11 +114,11 @@ app.on('ready', function () {
 
         var initBoard = function (url) {
             // Create the Main Board Window
-            var mainWindow = new BrowserWindow({ width: 2100, height: 1200 });
+            var mainWindow = new BrowserWindow({ width: 1600, height: 900 });
             mainWindow.on('closed', function () {
                 mainWindow = null;
             });
-            mainWindow.webContents.openDevTools();
+            // mainWindow.webContents.openDevTools();
 
             // and load the index.html of the app.
             mainWindow.loadURL(url + '/index.html');
