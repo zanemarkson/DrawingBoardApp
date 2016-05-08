@@ -1,0 +1,22 @@
+/* For The Main Page */
+
+#control-panel div {
+    margin-bottom: 25px;
+}
+
+#pad-container {
+    margin-top: 25px;
+}
+
+#control-panel-title {
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+#user-color-choice {
+    width: 40px;
+    height: 40px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+}

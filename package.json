@@ -4,7 +4,8 @@
   "description": "An interactive drawing board",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager . DrawingBoard --platform=darwin --arch=x64"
   },
   "author": {
     "name": "Zheng Ma",
@@ -18,6 +19,7 @@
     "random-string": "~0.1.2"
   },
   "devDependencies": {
+    "electron-packager": "^7.0.1",
     "electron-prebuilt": "^0.37.8"
   }
 }
