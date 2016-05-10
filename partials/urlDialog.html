@@ -23,31 +23,46 @@
           </div>
           <div class="col-md-8" style="margin-top: 5px">
               <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon3">@</span>
+                  <span class="input-group-addon" id="basic-addon3"><i class="fa fa-globe fa-lg" aria-hidden="true"></i></span>
                   <input type="url" class="form-control" placeholder="Host IP or URL" aria-describedby="basic-addon3" id="host-url">
               </div>
+
+              <div class="input-group" style="margin-top: 15px; width: 50%">
+                  <span class="input-group-addon" id="basic-addon4">@</span>
+                  <input type="url" class="form-control" placeholder="Channel" aria-describedby="basic-addon3" id="channel-name">
+              </div>
+
           </div>
-          <div class="col-md-4" style="margin-top: 5px">
-              <button type="submit" class="btn btn-info" onclick="chooseRemotehost()">Submit</button>
+
+          <div class="col-md-4" style="margin-top: 10px">
+              <button type="submit" class="btn btn-info" onclick="chooseRemotehost()"><i class="fa fa-link fa-lg" aria-hidden="true"></i> Connect</button>
           </div>
+
+
       </div>
 
       <h3> OR </h3>
-      <button type="button" class="btn btn-primary" onclick="chooseLocalhost()">Start/Connect To Localhost</button>
+      <button type="button" class="btn btn-primary" onclick="chooseLocalhost()"><i class="fa fa-server fa-lg" aria-hidden="true"></i>  Start/Connect To Localhost</button>
   </div>
 
    
    <script type="text/javascript"> 
       const ipcRenderer = require('electron').ipcRenderer;
+      var randomRoom = require('random-string');
+      var port = 8080 ;
+      var dest = null ;
       
       var chooseLocalhost = function(){
-          ipcRenderer.send('start-localhost', 'http://localhost');
+          dest = { url: 'http://localhost:8080', room: 'testdraw'};
+          ipcRenderer.send('start-localhost', dest);
       };
       
       var chooseRemotehost = function(){
-          var boardurl = document.getElementById('host-url').value ;
-          ipcRenderer.send('connect-remote-host', boardurl);
-          console.log(boardurl);
+          var boardurl = document.getElementById('host-url').value + ':' + port ;
+          var currentRoom = document.getElementById('channel-name').value ;
+          dest = { url: boardurl, room: currentRoom};
+          ipcRenderer.send('connect-remote-host', dest);
+          console.log(dest);
       };
       
    </script>

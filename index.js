@@ -3,13 +3,13 @@
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-
 const ipcMain = require('electron').ipcMain;
 // var mainWindow = null;
 
 var express = require('express'),
-    server = express();
-var port = process.env.PORT || 8080;
+    server = express(),
+    isServerRunning = false ;
+var port = 8080;
 var io = null;
 var randomRoom = require('random-string');
 
@@ -28,23 +28,35 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
 
     startApp = function () {
-        var BoardURL;
-        var urlDialog = new BrowserWindow({ width: 400, height: 300 });
+
+        var urlDialog = new BrowserWindow({ width: 400, height: 400 });
         urlDialog.loadURL('file://' + __dirname + '/partials/urlDialog.html');
         // urlDialog.webContents.openDevTools();
 
         ipcMain.on('start-localhost', function (event, arg) {
-            // Server-side logic
-            server.use(express.static(__dirname + '/'));
+
+            var BoardURL;
+            var thisRoom ;
+
+            // Server-side API
+
             var secret = 'fullstack';
+
             io = require('socket.io').listen(server.listen(port));
+            server.use('/index.html', function(req, res, next) {
+                thisRoom = req.query.room || randomRoom({ length: 7 });
+                console.log('Connect in Room:' + thisRoom );
+                next();
+            });
+            server.use(express.static(__dirname + '/'));
             io.on('connection', function (socket) {
+               
                 socket.on('load', function (data) {
-                    console.log('User from ' + socket.handshake.address + ' just joined ...');
+                    console.log('User from ' + socket.handshake.address + ' just joined ... channel = ' + data.room );
                     console.log(data);
 
                     if (data.key === secret) {
-                        var thisRoom = data.room || randomRoom({ length: 7 });
+                        thisRoom = data.room || thisRoom || randomRoom({ length: 7 });
                         socket.emit('access', {
                             access: "granted",
                             room: thisRoom
@@ -70,7 +82,7 @@ app.on('ready', function () {
                 socket.on('mouse-drawing', function (data) {
                     if (data.key === secret) {
                         // Tell all connected clients to navigate to the new slide
-                        console.log(data);
+                        //console.log(data);
                         io.in(data.room).emit('keep-drawing', data);
                     }
                 });
@@ -95,24 +107,27 @@ app.on('ready', function () {
 
             });
 
-            BoardURL = 'http://localhost:' + port;
-            console.log('Drawing Board Server is running on http://localhost:' + port);
+            BoardURL = arg.url;
+            console.log('Drawing Board Server is running on ' + BoardURL );
+            console.log('Channel is ' + arg.room);
             urlDialog.close();
-            initBoard(BoardURL);
+            initBoard(arg);
 
         });
 
         ipcMain.on('connect-remote-host', function (event, arg) {
-            BoardURL = arg;
+
+            var BoardURL;
+
+            BoardURL = arg.url;
             console.log(arg);
             console.log('Drawing Board Server is running on' + BoardURL);
+            console.log('Channel is ' + arg.room);
             urlDialog.close();
-            initBoard(BoardURL);
+            initBoard(arg);
         });
 
-
-
-        var initBoard = function (url) {
+        var initBoard = function (dest) {
             // Create the Main Board Window
             var mainWindow = new BrowserWindow({ width: 1600, height: 900 });
             mainWindow.on('closed', function () {
@@ -121,13 +136,15 @@ app.on('ready', function () {
             // mainWindow.webContents.openDevTools();
 
             // and load the index.html of the app.
-            mainWindow.loadURL(url + '/index.html');
+            mainWindow.loadURL(dest.url + '/index.html' + '?room=' + dest.room);
         };
 
 
     };
 
     startApp();
+
+    // setTimeout(startApp(), 1000);
 
 
 

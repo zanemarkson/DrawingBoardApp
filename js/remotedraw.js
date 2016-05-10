@@ -4,10 +4,8 @@ var Remote = ( function(){
 // Connect the socket
 
     var socket = io();
-    
-
     var key="fullstack";
-    var currentRoom = 'testdraw';
+    var currentRoom = window.location.href.split('?')[1].split('&')[0].split('=')[1];
 
     var submitKey = function (key) {
         // socket = io();
@@ -25,6 +23,8 @@ var Remote = ( function(){
             });
         }
     };
+
+    submitKey(key);
 
     var localOnly = function () {
         socket.disconnect();
