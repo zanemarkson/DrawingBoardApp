@@ -5,7 +5,17 @@ var Remote = ( function(){
 
     var socket = io();
     var key="fullstack";
-    var currentRoom = window.location.href.split('?')[1].split('&')[0].split('=')[1];
+    var currentRoom = window.location.href.split('?')[1] !== undefined ? window.location.href.split('?')[1].split('&')[0].split('=')[1] : null ;
+
+    // var randomString = function(length) {
+    //     var text = "";
+    //     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    //     for(var i = 0; i < length; i++) {
+    //         text += possible.charAt(Math.floor(Math.random() * possible.length));
+    //     }
+    //     return text;
+    // } ;
+
 
     var submitKey = function (key) {
         // socket = io();
@@ -14,7 +24,7 @@ var Remote = ( function(){
             socket.connect();
         }
 
-        currentRoom = document.getElementById('channel-name').value || currentRoom ;
+        currentRoom = document.getElementById('channel-name').value || currentRoom ;//|| randomString(7);
 
         if(key.length) {
             socket.emit('load', {
@@ -59,8 +69,6 @@ var Remote = ( function(){
             var ignorDrawing = true ;
             var position = {};
             var remoteTouchTimeout = null ;
-
-            // var privateSocket = io('/'+data.room);
 
             var sendPosition = function(event){
                 if(isTouch(event)){
