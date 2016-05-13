@@ -1,5 +1,6 @@
 {
-  "name": "drawing-board",
+  "name": "DrawingBoard",
+  "productName": "Drawing Board",
   "version": "0.0.1",
   "description": "An interactive drawing board",
   "main": "index.js",

@@ -20,7 +20,7 @@ var Remote = ( function(){
     var submitKey = function (key) {
         // socket = io();
         if(socket){
-            // socket = io.connect('http://localhost:8080');
+            // socket = io.connect('http://localhost:23398');
             socket.connect();
         }
 
